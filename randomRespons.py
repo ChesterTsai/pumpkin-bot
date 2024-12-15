@@ -36,5 +36,5 @@ def Hi():
 def choice(choices):
     responses = choices.split(',')
     
-    responMsg = f'{random.choice(new_choic)} 是最棒的答案'
+    responMsg = f'{random.choice(responses)} 是最棒的答案'
     return responMsg
