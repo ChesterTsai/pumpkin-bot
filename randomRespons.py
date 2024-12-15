@@ -3,7 +3,7 @@ import random
 responses = ""
 responMsg = ""
 
-def _8ball():
+def _8ball(question):
     responses = ['這是當然的',
                  '絕對是的阿',
                  '不用想了，一定是',

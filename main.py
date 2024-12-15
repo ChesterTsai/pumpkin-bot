@@ -66,7 +66,7 @@ async def clear(ctx, amount = 5):
 async def _8ball(ctx, *, question):
     """問機器人一個問題，用法: 8ball [問題]"""
     
-    await ctx.send(randomRespons._8ball())
+    await ctx.send(randomRespons._8ball(question))
 
 @client.command(aliases = ['安安', '你好', '嗨', 'HI', 'hi'])
 async def Hi(ctx):
