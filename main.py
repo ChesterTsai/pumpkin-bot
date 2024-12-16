@@ -83,7 +83,6 @@ async def choice(ctx, *, choic):
 @client.command()
 async def guess(ctx):
     """猜數字小遊戲"""
-    starttime = float(time.time())
     
     #check if the author of the text is the same person.
     def check(msg):
@@ -113,6 +112,8 @@ async def guess(ctx):
     
     print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 玩家選擇了{difficulty}')
     
+    starttime = float(time.time())
+    
     while True:
     
         await ctx.send(f'猜數字({str(min)}~{str(max)}, 輸入0結束遊戲)')
@@ -130,14 +131,13 @@ async def guess(ctx):
             await ctx.send('已接受遊戲中斷請求')
             print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 玩家已放棄')
             break
-
-        endtime = float(time.time())
         
         if msg > max or msg < min:
             await ctx.send('已接受遊戲中斷請求')
             print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 玩家已放棄')
             return 0
         
+        endtime = float(time.time())
         
         if msg != ans and abs(msg - ans) <= giveHint and chancesLeft != 1:
             await ctx.send('**很接近囉**')
