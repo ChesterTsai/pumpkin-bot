@@ -1,1 +1,1 @@
-{"guessGame": {"old_ans": 58}}
+{"old_ans": 0, "easy": {"min": 1, "max": 100, "chances": 5, "totalTimeGiven": 30, "giveHint": 5}, "normal": {"min": 1, "max": 200, "chances": 7, "totalTimeGiven": 32, "giveHint": 15}, "hard": {"min": 1, "max": 1000, "chances": 8, "totalTimeGiven": 35, "giveHint": 25}}

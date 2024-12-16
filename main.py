@@ -13,6 +13,7 @@ import moraGame
 
 with open('token.txt') as f:
     TOKEN = f.readline()
+    f.close()
 client = commands.Bot(command_prefix = '$', intents = discord.Intents.all())
 
 @client.event
@@ -36,8 +37,9 @@ async def shutdown(ctx, reason = ''):
         f.close()
     except FileNotFoundError:
         await ctx.send("建立機器人維護者資料...")
-        with open('Admin.txt', 'w', encoding='utf-8') as file:
-            file.write("")
+        with open('Admin.txt', 'w', encoding='utf-8') as f:
+            f.write("")
+            f.close()
     
     if str(ctx.message.author.id) not in ADMIN_ID_LIST:
         await ctx.send('去你媽的沒權限還想把我關掉')
@@ -94,25 +96,21 @@ async def guess(ctx):
     match difficulty:
         case "1":
             difficulty = "簡單"
-            guessGame.easy()
+            min, max, chances, totalTimeGiven, giveHint = guessGame.easy()
         case "2":
             difficulty = "一般"
-            guessGame.normal()
+            min, max, chances, totalTimeGiven, giveHint = guessGame.normal()
         case "3":
             difficulty = "困難"
-            guessGame.hard()
+            min, max, chances, totalTimeGiven, giveHint = guessGame.hard()
         case _:
             await ctx.send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 錯誤選項，遊戲結束')
             return 0
-        
+    
+    ans = guessGame.guessGameAnswer(min, max)
+    
     
     print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 玩家選擇了{difficulty}')
-    
-    min, max = guessGame.min, guessGame.max
-    chances = guessGame.chances
-    ans = guessGame.guessGameAnswer()
-    chancesLeft = chances
-    giveHint = guessGame.giveHint
     
     while True:
     
@@ -120,7 +118,7 @@ async def guess(ctx):
         
         # wait for giving number by the client
         try:
-            msg = await client.wait_for("message", check = check, timeout = guessGame.timeoutTime)
+            msg = await client.wait_for("message", check = check, timeout = 4.0)
         except asyncio.TimeoutError:
             await ctx.send(f'想太久了吧！你沒時間了\n正確答案是{str(ans)}')
             print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 玩家已超時')
@@ -142,7 +140,7 @@ async def guess(ctx):
         
         if msg != ans and abs(msg - ans) <= giveHint and chancesLeft != 1:
             await ctx.send('**很接近囉**')
-        if endtime - starttime > 30:
+        if endtime - starttime > totalTimeGiven:
             await ctx.send(f'你沒時間了\n正確答案是{str(ans)}')
             break
         elif chancesLeft == chances and msg == ans:

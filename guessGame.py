@@ -3,60 +3,58 @@ import time
 import datetime
 import json
 
-# default goes with the easy one
-min, max = 1, 100   # 猜數字的範圍
-chances = 5         # 擁有的機會
-timeoutTime = 4.0   # 多久後會觸發過久提示
-giveHint = 5        # 與正確數差距多少時給予提示
+with open("variables.json", "r", encoding='utf-8') as f:
+    data = json.load(f)
+    f.close()
 
 # 簡單模式
 def easy():
-    global min, max, chances, timeoutTime
-    min, max = 1, 100
-    chances = 5
-    timeoutTime = 4.0
-    giveHint = 5
+    min, max = data["easy"]["min"], data["easy"]["max"]
+    chances = data["easy"]["chances"]
+    totalTimeGiven = data["easy"]["totalTimeGiven"]
+    giveHint = data["easy"]["giveHint"]
+    
+    return (min, max, chances, totalTimeGiven, giveHint)
 
 # 一般模式
 def normal():
-    global min, max, chances, timeoutTime
-    min, max = 1, 200
-    chances = 4
-    timeoutTime = 5.0
-    giveHint = 10
+    min, max = data["normal"]["min"], data["normal"]["max"]
+    chances = data["normal"]["chances"]
+    totalTimeGiven = data["normal"]["totalTimeGiven"]
+    giveHint = data["normal"]["giveHint"]
+    
+    return (min, max, chances, totalTimeGiven, giveHint)
 
 # 困難模式
 def hard():
-    global min, max, chances, timeoutTime
-    min, max = 1, 1000
-    chances = 25
-    timeoutTime = 10.0
-    giveHint = 50
+    min, max = data["hard"]["min"], data["hard"]["max"]
+    chances = data["hard"]["chances"]
+    totalTimeGiven = data["hard"]["totalTimeGiven"]
+    giveHint = data["hard"]["giveHint"]
+    
+    return (min, max, chances, totalTimeGiven, giveHint)
 
-def guessGameAnswer():
+def guessGameAnswer(min, max):
     
-    with open("variables.json", "r", encoding='utf-8') as f:
-        data = json.load(f)
-        f.close()
-    for guessGameVariables in data:
-        old_ans = data[guessGameVariables]["old_ans"]
+    old_ans = data["old_ans"]
+
+    ans = random.randint(min, max)
+    RandomTimes = 0
     
+    while ans == old_ans:
         ans = random.randint(min, max)
-        RandomTimes = 0
-        
-        while ans == old_ans:
-            ans = random.randint(min, max)
-            RandomTimes += 1
-        
-        if RandomTimes == 0:
-            print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 答案:{ans}')
-        else:
-            print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 答案:{ans} (重骰{RandomTimes}次)')
-        
-        old_ans = ans
-        
-        data[str(guessGameVariables)]["old_ans"] = old_ans
-        with open("variables.json", "w", encoding='utf-8') as f:
-            json.dump(data, f)
+        RandomTimes += 1
+    
+    if RandomTimes == 0:
+        print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 答案:{ans}')
+    else:
+        print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 答案:{ans} (重骰{RandomTimes}次)')
+    
+    old_ans = ans
+    
+    data["old_ans"] = old_ans
+    with open("variables.json", "w", encoding='utf-8') as f:
+        json.dump(data, f)
+        f.close()
     
     return ans
