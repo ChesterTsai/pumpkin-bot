@@ -164,7 +164,7 @@ async def guess(ctx):
         else:
             break
 
-    if msg >= 1 and msg <= 100:
+    if msg >= min and msg <= max:
         await ctx.send('花了{:.2f}秒'.format(endtime - starttime))
 
 @client.command()
