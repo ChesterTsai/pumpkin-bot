@@ -109,6 +109,7 @@ async def guess(ctx):
     
     ans = guessGame.guessGameAnswer(min, max)
     
+    chancesLeft = chances
     
     print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 玩家選擇了{difficulty}')
     
