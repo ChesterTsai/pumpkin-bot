@@ -37,6 +37,7 @@ def guessGameAnswer():
     
     with open("variables.json", "r", encoding='utf-8') as f:
         data = json.load(f)
+        f.close()
     for guessGameVariables in data:
         old_ans = data[guessGameVariables]["old_ans"]
     
