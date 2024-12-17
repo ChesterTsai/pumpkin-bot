@@ -115,7 +115,7 @@ async def guess(ctx):
     gameModeInfo = f'你選擇了{difficulty}模式，以下是此模式的數值\n'
     gameModeInfo += f'終極密碼範圍:\t{str(min)}~{str(max)}\n'
     gameModeInfo += f'機會:\t{str(chances)}次\n'
-    gameModeInfo += f'總時間限制:\t{str(totalTimeGiven)}\n'
+    gameModeInfo += f'總時間限制:\t{str(totalTimeGiven)}秒\n'
     gameModeInfo += f'跟正確答案差距{str(giveHint)}時會給予「**很接近囉**」的提示\n'
     gameModeInfo += f'進行遊戲？「Y/n」'
     await ctx.send(gameModeInfo)
