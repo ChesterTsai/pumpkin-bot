@@ -95,13 +95,13 @@ async def guess(ctx):
     match difficulty:
         case "1":
             difficulty = "簡單"
-            min, max, chances, totalTimeGiven, giveHint = guessGame.easy()
+            min, max, chances, timeGiven, giveHint = guessGame.easy()
         case "2":
             difficulty = "一般"
-            min, max, chances, totalTimeGiven, giveHint = guessGame.normal()
+            min, max, chances, timeGiven, giveHint = guessGame.normal()
         case "3":
             difficulty = "困難"
-            min, max, chances, totalTimeGiven, giveHint = guessGame.hard()
+            min, max, chances, timeGiven, giveHint = guessGame.hard()
         case _:
             await ctx.send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 錯誤選項，遊戲結束')
             return 0
@@ -115,7 +115,7 @@ async def guess(ctx):
     gameModeInfo = f'你選擇了{difficulty}模式，以下是此模式的數值\n'
     gameModeInfo += f'終極密碼範圍:\t{str(min)}~{str(max)}\n'
     gameModeInfo += f'機會:\t{str(chances)}次\n'
-    gameModeInfo += f'總時間限制:\t{str(totalTimeGiven)}秒\n'
+    gameModeInfo += f'每次猜數字時間限制:\t{str(timeGiven)}秒\n'
     gameModeInfo += f'跟正確答案差距{str(giveHint)}時會給予「**很接近囉**」的提示\n'
     gameModeInfo += f'進行遊戲？「Y/n」'
     await ctx.send(gameModeInfo)
@@ -136,7 +136,7 @@ async def guess(ctx):
         
         # wait for giving number by the client
         try:
-            msg = await client.wait_for("message", check = check, timeout = 4.0)
+            msg = await client.wait_for("message", check = check, timeout = timeGiven)
         except asyncio.TimeoutError:
             await ctx.send(f'想太久了吧！你沒時間了\n正確答案是{str(ans)}')
             print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 玩家已超時')
@@ -157,9 +157,6 @@ async def guess(ctx):
         
         if msg != ans and abs(msg - ans) <= giveHint and chancesLeft != 1:
             await ctx.send('**很接近囉**')
-        if endtime - starttime > totalTimeGiven:
-            await ctx.send(f'你沒時間了\n正確答案是{str(ans)}')
-            break
         elif chancesLeft == chances and msg == ans:
             await ctx.send('恭喜! 第一次就猜中!')
             break

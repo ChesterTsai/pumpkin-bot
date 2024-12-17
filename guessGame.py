@@ -11,28 +11,28 @@ with open("variables.json", "r", encoding='utf-8') as f:
 def easy():
     min, max = data["easy"]["min"], data["easy"]["max"]
     chances = data["easy"]["chances"]
-    totalTimeGiven = data["easy"]["totalTimeGiven"]
+    timeGiven = data["easy"]["timeGiven"]
     giveHint = data["easy"]["giveHint"]
     
-    return (min, max, chances, totalTimeGiven, giveHint)
+    return (min, max, chances, timeGiven, giveHint)
 
 # 一般模式
 def normal():
     min, max = data["normal"]["min"], data["normal"]["max"]
     chances = data["normal"]["chances"]
-    totalTimeGiven = data["normal"]["totalTimeGiven"]
+    timeGiven = data["normal"]["timeGiven"]
     giveHint = data["normal"]["giveHint"]
     
-    return (min, max, chances, totalTimeGiven, giveHint)
+    return (min, max, chances, timeGiven, giveHint)
 
 # 困難模式
 def hard():
     min, max = data["hard"]["min"], data["hard"]["max"]
     chances = data["hard"]["chances"]
-    totalTimeGiven = data["hard"]["totalTimeGiven"]
+    timeGiven = data["hard"]["timeGiven"]
     giveHint = data["hard"]["giveHint"]
     
-    return (min, max, chances, totalTimeGiven, giveHint)
+    return (min, max, chances, timeGiven, giveHint)
 
 def guessGameAnswer(min, max):
     
