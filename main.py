@@ -155,9 +155,12 @@ async def guess(ctx):
         
         endtime = float(time.time())
         
+        # Give Player a hint
         if msg != ans and abs(msg - ans) <= giveHint and chancesLeft != 1:
             await ctx.send('**很接近囉**')
-        elif chancesLeft == chances and msg == ans:
+        
+        # Detect if the Player guesses the right number
+        if chancesLeft == chances and msg == ans:
             await ctx.send('恭喜! 第一次就猜中!')
             break
         elif chancesLeft >= 1 and msg == ans:
