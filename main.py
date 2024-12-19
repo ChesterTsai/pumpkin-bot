@@ -106,11 +106,11 @@ async def guess(ctx):
             await ctx.send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 錯誤選項，遊戲結束')
             return 0
     
-    ans = guessGame.guessGameAnswer(min, max)
-    
     chancesLeft = chances
     
     print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 玩家選擇了{difficulty}')
+    
+    ans = guessGame.guessGameAnswer(min, max)
     
     gameModeInfo = f'你選擇了{difficulty}模式，以下是此模式的數值\n'
     gameModeInfo += f'終極密碼範圍:\t{str(min)}~{str(max)}\n'
