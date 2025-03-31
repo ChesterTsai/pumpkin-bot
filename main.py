@@ -1,6 +1,13 @@
+"""
+# to generate "requirements.txt", do:
+# pipreqs /path/to/project
+"""
+
 import discord
 from discord.ext import commands
 from discord.ext import tasks
+from dotenv import load_dotenv
+import os
 import time
 import datetime
 import asyncio
@@ -10,10 +17,10 @@ import randomRespons
 import guessGame
 import diceGame
 import moraGame
+import urlScanner
 
-with open('token.txt') as f:
-    TOKEN = f.readline()
-    f.close()
+load_dotenv()
+TOKEN = os.getenv("DISCORD_TOKEN")
 client = commands.Bot(command_prefix = '$', intents = discord.Intents.all())
 
 @client.event
@@ -79,6 +86,63 @@ async def Hi(ctx):
 async def choice(ctx, *, choic):
     """選擇困難症，讓機器人幫你選擇，用法: choice (問題一) (問題二) [問題三] [問題四]..."""
     await ctx.send(randomRespons.choice(choic))
+
+@client.command()
+async def scan(ctx, link):
+    """掃描可疑網址"""
+    
+    text = "請選擇資訊完整度\n"
+    text += "(1:完整資訊/2:不管風險分數，只看是否為危險網站/3:查看是否為釣魚網站、是否有病毒及風險分數)"
+    await ctx.send(text)
+    
+    def check(msg):
+        return msg.author == ctx.author and msg.channel == ctx.channel
+    
+    userSelection = await client.wait_for("message", check = check)
+    userSelection = userSelection.content
+    
+    strictness = 0
+    
+    additional_params = {
+        'strictness' : strictness
+    }
+    
+    ipqs = urlScanner.IPQS()
+    result = ipqs.malicious_url_scanner_api(link, additional_params)
+    
+    match userSelection:
+        case "1":
+            if 'success' in result and result['success'] == True:
+                await ctx.send(result)
+        case "2":
+            respone = f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] '
+            respone += link
+            respone += ':\n'
+            if result['suspicious'] == True:
+                respone += ' 是可疑網站'
+            else:
+                respone += ' 不是可疑網站'
+            await ctx.send(respone)
+        case "3":
+            respone = f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] '
+            respone += link
+            respone += ":\n"
+            if result['phishing'] == True:
+                respone += ' 是釣魚網站\n'
+            else:
+                respone += ' 不是釣魚網站\n'
+            if result['malware'] == True:
+                respone += ' 含有病毒\n'
+            else:
+                respone += ' 不含病毒\n'
+            if result['risk_score'] > 85:
+                respone += ' 風險評分超過85分，高風險(0分乾淨，100分高風險)'
+            else:
+                respone += ' 風險評分未超過85分，低風險(0分乾淨，100分高風險)'
+            await ctx.send(respone)
+        case _:
+            await ctx.send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] 錯誤選項')
+            return 0
 
 @client.command()
 async def guess(ctx):
