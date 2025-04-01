@@ -37,40 +37,41 @@ if __name__ == "__main__":
     ipqs = IPQS()
     result = ipqs.malicious_url_scanner_api(URL, additional_params)
 
-    if 'success' in result and result['success'] == True:
-        print(result)
-        """
-        NOTICE: If you want to use one of the examples below, remove
-        any lines containing /*, */ and *-, then remove * from any of the
-        the remaining lines.
-        """
-        
-        """
-        - Example 1: Identify suspicious URLs regardless of Risk Score
-        
-        if result['suspicious'] == True:
-        # flag suspicious URL
-        }
-        """
-        
-        """
-        - Example 2: We'd like to block all malicious URLs suspected of being used for phishing or malware
-        
-        if result['phishing'] == True or result['malware'] === True or result['risk_score'] > 85):
-            # flag high risk URLs likely to be malicious
-        }
-        """
-        
-        """
-        - Example 3: We'd like to block all links on parked domains
-        
-        if result['parking'] == True:
-        	# flag parked domains
-        }
-        """
-        
-        """
-        If you are confused with these examples or simply have a use case
-        not covered here, please feel free to contact IPQualityScore's support
-        team. We'll craft a custom piece of code to meet your requirements.
-        """
+    for x, y in result.items():
+        print(f'{x}:{y}')
+    
+    """
+    NOTICE: If you want to use one of the examples below, remove
+    any lines containing /*, */ and *-, then remove * from any of the
+    the remaining lines.
+    """
+    
+    """
+    - Example 1: Identify suspicious URLs regardless of Risk Score
+    
+    if result['suspicious'] == True:
+    # flag suspicious URL
+    }
+    """
+    
+    """
+    - Example 2: We'd like to block all malicious URLs suspected of being used for phishing or malware
+    
+    if result['phishing'] == True or result['malware'] === True or result['risk_score'] > 85):
+        # flag high risk URLs likely to be malicious
+    }
+    """
+    
+    """
+    - Example 3: We'd like to block all links on parked domains
+    
+    if result['parking'] == True:
+        # flag parked domains
+    }
+    """
+    
+    """
+    If you are confused with these examples or simply have a use case
+    not covered here, please feel free to contact IPQualityScore's support
+    team. We'll craft a custom piece of code to meet your requirements.
+    """
