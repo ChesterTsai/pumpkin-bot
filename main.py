@@ -124,7 +124,7 @@ async def scan(ctx, link):
     
     if userSelection == "1":
         for x, y in result.items():
-            print(f'{x}:{y}')
+            respone += f'{x}:{y}\n'
         
     if userSelection == "2":
         if result['suspicious'] == True:
