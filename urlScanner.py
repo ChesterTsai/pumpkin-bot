@@ -9,6 +9,12 @@ import json
 import requests
 import urllib
 
+"""
+# add IPQS url scanner API in ".env" file to make this function work.
+# for example:
+# .env
+# IPQS_API = InsertIpqsApiHere
+"""
 load_dotenv()
 API = os.getenv("IPQS_API")
 
