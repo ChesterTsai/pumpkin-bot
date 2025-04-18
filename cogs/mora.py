@@ -1,7 +1,37 @@
+import discord
+from discord.ext import commands
 import datetime
 import random
 
-def mora(playerChoice):
+class Mora(commands.Cog):
+    def __init__(self, bot):
+        self.bot = bot
+    
+    @commands.command()
+    async def mora(self, ctx):
+        """猜拳小遊戲"""
+
+        playAgain = True
+
+        while playAgain == True:
+        
+            await ctx.send(f'輸入1:剪刀/2:石頭/3:布, 輸入其他結束遊戲')
+            def check(msg):
+                return msg.author == ctx.author and msg.channel == ctx.channel
+            
+            msg = await self.bot.wait_for("message", check=check)
+            
+            gameMsg, gameResult = winLose(msg.content)
+            
+            await ctx.send(gameMsg)
+            
+            if gameResult != "Tie":
+                playAgain = False
+
+async def setup(bot):
+    await bot.add_cog(Mora(bot))
+
+def winLose(playerChoice):
     
     botChoice = str(random.randint(1, 3))
     
