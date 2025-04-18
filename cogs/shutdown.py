@@ -22,6 +22,7 @@ class Shutdown(commands.Cog):
             with open('./data/Admin.txt', 'w', encoding='utf-8') as f:
                 f.write("")
                 f.close()
+            await ctx.send("建立完成")
         
         
         # actual function

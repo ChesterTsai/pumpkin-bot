@@ -8,7 +8,7 @@ class _8Ball(commands.Cog):
     
     @commands.command(aliases = ['8ball'])
     async def _8ball(self, ctx, *, question):
-        """問機器人一個問題，用法: 8ball [問題]"""
+        """問機器人一個問題，用法: 8ball (問題)"""
         
         responses = ['這是當然的',
                  '絕對是的阿',
