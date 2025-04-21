@@ -6,7 +6,7 @@ class Clear(commands.Cog):
         self.bot = bot
     
     @commands.command()
-    async def clear(self, ctx, amount = 5):
+    async def clear(self, ctx, amount: int = 5):
         """清除訊息，僅管理員可以使用，用法: clear [要清除的訊息數量，預設為5]"""
         if ctx.message.author.guild_permissions.administrator:
             amount += 1

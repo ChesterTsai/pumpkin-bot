@@ -7,7 +7,7 @@ class _8Ball(commands.Cog):
         self.bot = bot
     
     @commands.command(aliases = ['8ball'])
-    async def _8ball(self, ctx, *, question):
+    async def _8ball(self, ctx, *, question: str):
         """問機器人一個問題，用法: 8ball (問題)"""
         
         responses = ['這是當然的',

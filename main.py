@@ -25,13 +25,14 @@ async def on_command_error(ctx, error):
     if isinstance(error, commands.CommandNotFound):
         return 0
 
-async def load():
+async def loadCogOnStartUp():
     for filename in os.listdir("./cogs"):
         if filename.endswith(".py"):
             await bot.load_extension(f"cogs.{filename[:-3]}")
 
 @bot.command()
-async def reload(ctx, cog: str):
+async def load(ctx, cog: str):
+    """load a newly added cog"""
     
     # See if "Admin.txt" exists, if not, create one.
     try:
@@ -50,13 +51,60 @@ async def reload(ctx, cog: str):
         await ctx.send("錯誤，不是機器人維護者")
         return 0
     
-    await bot.reload_extension(f"cogs.{cog.lower()}")
-    await ctx.send("已刷新")
+    await bot.load_extension(f"cogs.{cog}")
+    await ctx.send("已載入")
+
+@bot.command()
+async def reload(ctx, cog: str):
+    """reload certain cog"""
     
+    # See if "Admin.txt" exists, if not, create one.
+    try:
+        f = open('./data/Admin.txt', 'r', encoding='utf-8')
+        tmp = f.read()
+        ADMIN_ID_LIST = tmp.split('\n')
+        f.close()
+    except FileNotFoundError:
+        await ctx.send("建立機器人維護者資料...")
+        with open('./data/Admin.txt', 'w', encoding='utf-8') as f:
+            f.write("")
+            f.close()
+        await ctx.send("建立完成")
+    
+    if str(ctx.message.author.id) not in ADMIN_ID_LIST:
+        await ctx.send("錯誤，不是機器人維護者")
+        return 0
+    
+    await bot.reload_extension(f"cogs.{cog}")
+    await ctx.send("已刷新")
+
+@bot.command()
+async def unload(ctx, cog: str):
+    """unload certain cog"""
+    
+    # See if "Admin.txt" exists, if not, create one.
+    try:
+        f = open('./data/Admin.txt', 'r', encoding='utf-8')
+        tmp = f.read()
+        ADMIN_ID_LIST = tmp.split('\n')
+        f.close()
+    except FileNotFoundError:
+        await ctx.send("建立機器人維護者資料...")
+        with open('./data/Admin.txt', 'w', encoding='utf-8') as f:
+            f.write("")
+            f.close()
+        await ctx.send("建立完成")
+    
+    if str(ctx.message.author.id) not in ADMIN_ID_LIST:
+        await ctx.send("錯誤，不是機器人維護者")
+        return 0
+    
+    await bot.unload_extension(f"cogs.{cog}")
+    await ctx.send("已取消載入")
 
 async def main():
     async with bot:
-        await load()
+        await loadCogOnStartUp()
         await bot.start(TOKEN)
 
 asyncio.run(main())

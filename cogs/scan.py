@@ -7,7 +7,7 @@ class Scan(commands.Cog):
         self.bot = bot
     
     @commands.command()
-    async def scan(self, ctx, link):
+    async def scan(self, ctx, link: str):
         """掃描可疑網址"""
         
         text = "請選擇資訊完整度\n"

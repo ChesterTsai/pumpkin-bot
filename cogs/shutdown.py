@@ -8,7 +8,7 @@ class Shutdown(commands.Cog):
         self.bot = bot
     
     @commands.command()
-    async def shutdown(self, ctx, reason = ''):
+    async def shutdown(self, ctx, reason: str = ''):
         """關閉機器人，僅機器人維護者可以使用此命令"""
         
         # See if "Admin.txt" exists, if not, create one.
