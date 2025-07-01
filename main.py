@@ -2,6 +2,7 @@
 # to generate "requirements.txt", do:
 # pipreqs /path/to/project
 """
+#https://discord.com/api/oauth2/authorize?bot_id=915579282439434280&permissions=8&scope=bot
 
 import discord
 from discord.ext import commands
@@ -10,14 +11,16 @@ from dotenv import load_dotenv
 import os
 import datetime
 import asyncio
+import random
+import time
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
-bot = commands.Bot(command_prefix = '$', intents = discord.Intents.all())
+bot = commands.Bot(command_prefix = '', intents = discord.Intents.all())
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name="你"))
+    await bot.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name="A片"))
     print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] Bot is ready')
 
 @bot.event

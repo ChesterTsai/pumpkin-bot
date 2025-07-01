@@ -1,1 +1,1 @@
-{"old_ans": 0, "easy": {"min": 1, "max": 100, "chances": 5, "timeGiven": 4.0, "giveHint": 5}, "normal": {"min": 1, "max": 200, "chances": 6, "timeGiven": 5.5, "giveHint": 15}, "hard": {"min": 1, "max": 1000, "chances": 7, "timeGiven": 7.0, "giveHint": 25}}
+{"old_ans": 791, "easy": {"min": 1, "max": 100, "chances": 5, "timeGiven": 4.0, "giveHint": 5}, "normal": {"min": 1, "max": 200, "chances": 6, "timeGiven": 5.5, "giveHint": 15}, "hard": {"min": 1, "max": 1000, "chances": 7, "timeGiven": 7.0, "giveHint": 25}}

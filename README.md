@@ -1,6 +1,6 @@
 # Minigame in Discord.py
 
-[English Version of the README file](/README_EN.md)
+[English Version of README](/README_EN.md)
 
 ### Prerequisites
 運行`pip3 install -r requirements.txt`來下載所需的程序依賴<br>
