@@ -4,6 +4,7 @@ import random
 import time
 import datetime
 import json
+import asyncio
 
 class Guess(commands.Cog):
     def __init__(self, bot):
