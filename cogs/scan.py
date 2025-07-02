@@ -3,7 +3,7 @@ from discord.ext import commands
 import urlScanner
 import datetime
 
-class Scan(commands.Cog):
+class scan(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
@@ -74,4 +74,4 @@ class Scan(commands.Cog):
         await ctx.send(respone)
 
 async def setup(bot):
-    await bot.add_cog(Scan(bot))
+    await bot.add_cog(scan(bot))

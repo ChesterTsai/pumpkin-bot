@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import random
 
-class _8Ball(commands.Cog):
+class _8ball(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
@@ -26,4 +26,4 @@ class _8Ball(commands.Cog):
         await ctx.send(f'你問的問題是: {question}\n我的回答是: {random.choice(responses)}')
 
 async def setup(bot):
-    await bot.add_cog(_8Ball(bot))
+    await bot.add_cog(_8ball(bot))

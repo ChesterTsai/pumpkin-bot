@@ -4,7 +4,7 @@ import random
 import time
 import datetime
 
-class Dice(commands.Cog):
+class dice(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
@@ -36,7 +36,7 @@ class Dice(commands.Cog):
                 await ctx.send(f'你還在被禁言中,剩餘{10 - int(endtime - starttime)}秒')
 
 async def setup(bot):
-    await bot.add_cog(Dice(bot))
+    await bot.add_cog(dice(bot))
 
 
 

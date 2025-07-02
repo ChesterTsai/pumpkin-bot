@@ -6,7 +6,7 @@ import datetime
 import json
 import asyncio
 
-class Guess(commands.Cog):
+class guess(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
@@ -114,7 +114,7 @@ class Guess(commands.Cog):
             await ctx.send('花了{:.2f}秒'.format(endtime - starttime))
 
 async def setup(bot):
-    await bot.add_cog(Guess(bot))
+    await bot.add_cog(guess(bot))
 
 
 

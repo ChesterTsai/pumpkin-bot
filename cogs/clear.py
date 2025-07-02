@@ -1,7 +1,7 @@
 import discord
 from discord.ext import commands
 
-class Clear(commands.Cog):
+class clear(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
@@ -15,4 +15,4 @@ class Clear(commands.Cog):
             await ctx.channel.send('你沒有此權限')
 
 async def setup(bot):
-    await bot.add_cog(Clear(bot))
+    await bot.add_cog(clear(bot))

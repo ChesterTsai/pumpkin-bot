@@ -3,7 +3,7 @@ from discord.ext import commands
 import datetime
 import random
 
-class Mora(commands.Cog):
+class mora(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
@@ -29,7 +29,7 @@ class Mora(commands.Cog):
                 playAgain = False
 
 async def setup(bot):
-    await bot.add_cog(Mora(bot))
+    await bot.add_cog(mora(bot))
 
 def winLose(playerChoice):
     

@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import random
 
-class Choice(commands.Cog):
+class choice(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
@@ -13,4 +13,4 @@ class Choice(commands.Cog):
         await ctx.send(f'{random.choice(responses)} 是最棒的答案')
 
 async def setup(bot):
-    await bot.add_cog(Choice(bot))
+    await bot.add_cog(choice(bot))

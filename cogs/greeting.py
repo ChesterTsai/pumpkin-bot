@@ -2,7 +2,7 @@ import discord
 from discord.ext import commands
 import random
 
-class Greetings(commands.Cog):
+class greetings(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
@@ -22,4 +22,4 @@ class Greetings(commands.Cog):
         await ctx.send(f'{random.choice(responses)}')
 
 async def setup(bot):
-    await bot.add_cog(Greetings(bot))
+    await bot.add_cog(greetings(bot))
