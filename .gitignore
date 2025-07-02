@@ -1,7 +1,6 @@
 Admin.txt
 __pycache__/
 .env
-variables.json
 
 checkMsg.py
 loops.py
