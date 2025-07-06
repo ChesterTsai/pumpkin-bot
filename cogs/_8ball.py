@@ -3,12 +3,13 @@ from discord.ext import commands
 import random
 
 class _8ball(commands.Cog):
+    """問機器人一個問題"""
     def __init__(self, bot):
         self.bot = bot
     
     @commands.command(aliases = ['8ball'])
     async def _8ball(self, ctx, *, question: str):
-        """問機器人一個問題，用法: 8ball (問題)"""
+        """用法: 8ball [問題]"""
         
         responses = ['這是當然的',
                  '絕對是的阿',

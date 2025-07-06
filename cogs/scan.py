@@ -4,12 +4,13 @@ import urlScanner
 import datetime
 
 class scan(commands.Cog):
+    """掃描可疑網址"""
     def __init__(self, bot):
         self.bot = bot
     
     @commands.command()
     async def scan(self, ctx, link: str):
-        """掃描可疑網址"""
+        """用法：scan [網址]"""
         
         text = "請選擇資訊完整度\n"
         text += "(1:完整資訊/2:不管風險分數，只看是否為危險網站/3:查看是否為釣魚網站、是否有病毒及風險分數)"

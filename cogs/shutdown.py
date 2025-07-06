@@ -4,12 +4,13 @@ import datetime
 import time
 
 class shutdown(commands.Cog):
+    """關閉機器人，僅機器人維護者可以使用此命令"""
     def __init__(self, bot):
         self.bot = bot
     
     @commands.command()
     async def shutdown(self, ctx, reason: str = ''):
-        """關閉機器人，僅機器人維護者可以使用此命令"""
+        """用法：shutdown [原因]"""
         
         # See if "Admin.txt" exists, if not, create one.
         try:
