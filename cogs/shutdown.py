@@ -10,7 +10,7 @@ class shutdown(commands.Cog):
     
     @commands.command()
     async def shutdown(self, ctx, reason: str = ''):
-        """用法：shutdown [原因]"""
+        """用法：shutdown (原因)"""
         
         # See if "Admin.txt" exists, if not, create one.
         try:
