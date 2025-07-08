@@ -10,8 +10,11 @@ class reactionRole(commands.Cog):
     @commands.command()
     async def addRole(self, ctx, messageID :str, emoji_id :int, role_name :str):
         """用法：addRole [訊息ID] [貼圖ID] [身分組名稱]"""
-        writeData(messageID, emoji_id, role_name)
-        await ctx.send("寫入成功!")
+        if ctx.message.author.guild_permissions.administrator:
+            writeData(messageID, emoji_id, role_name)
+            await ctx.send("寫入成功!")
+        else:
+            await ctx.channel.send('你沒有此權限')
     
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):        
