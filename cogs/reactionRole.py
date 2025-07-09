@@ -3,13 +3,20 @@ from discord.ext import commands
 import json
 
 class reactionRole(commands.Cog):
-    """點一下反應以加入身分組"""
+    """
+        點一下反應以加入身分組
+        警告：拜託別把機器人身分組拉到最上面，給他高於自動給的身分組就好
+        Warning: Please DO NOT make the bot role the highest role,
+        only make it higher than the reaction role
+        
+        用法：addRole [訊息ID] [貼圖ID] [身分組名稱]
+    """
     def __init__(self, bot):
         self.bot = bot
     
     @commands.command()
     async def addRole(self, ctx, messageID :str, emoji_id :int, role_name :str):
-        """用法：addRole [訊息ID] [貼圖ID] [身分組名稱]"""
+        """輸入"help reactionRole"以獲取更多資訊"""
         if ctx.message.author.guild_permissions.administrator:
             writeData(messageID, emoji_id, role_name)
             await ctx.send("寫入成功!")
