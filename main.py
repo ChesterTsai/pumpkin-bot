@@ -20,7 +20,7 @@ bot = commands.Bot(command_prefix = '', intents = discord.Intents.all())
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(status=discord.Status.online, activity=discord.CustomActivity(name="726記得出門投票！大罷免！大成功！"))
+    await bot.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name="A片"))
     print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] Bot is ready')
 
 @bot.event
