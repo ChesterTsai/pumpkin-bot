@@ -16,26 +16,27 @@ class reactionRole(commands.Cog):
     async def addRole(self, ctx):
 
         if ctx.message.author.guild_permissions.administrator:
-            #check if the author of the text is the same person.
-            def check(msg):
-                return msg.author == ctx.author and msg.channel == ctx.channel
-            
-            await ctx.send("請輸入要加入反應的訊息ID")
-            messageID = await self.bot.wait_for("message", check = check)
-            messageID = messageID.content
-            
-            await ctx.send("請輸入貼圖ID")
-            emoji_id = await self.bot.wait_for("message", check = check)
-            emoji_id = int(emoji_id.content)
-            
-            await ctx.send("請輸入身分組名稱")
-            role_name = await self.bot.wait_for("message", check = check)
-            role_name = role_name.content
-            
-            writeData(messageID, emoji_id, role_name)
-            await ctx.send("寫入成功!")
-        else:
             await ctx.channel.send('你沒有此權限')
+            return
+        
+        #check if the author of the text is the same person.
+        def check(msg):
+            return msg.author == ctx.author and msg.channel == ctx.channel
+        
+        await ctx.send("請輸入要加入反應的訊息ID")
+        messageID = await self.bot.wait_for("message", check = check)
+        messageID = messageID.content
+        
+        await ctx.send("請輸入貼圖ID")
+        emoji_id = await self.bot.wait_for("message", check = check)
+        emoji_id = int(emoji_id.content)
+        
+        await ctx.send("請輸入身分組名稱")
+        role_name = await self.bot.wait_for("message", check = check)
+        role_name = role_name.content
+        
+        writeData(messageID, emoji_id, role_name)
+        await ctx.send("寫入成功!")
     
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):        
