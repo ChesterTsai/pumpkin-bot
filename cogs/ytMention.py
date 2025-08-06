@@ -17,7 +17,7 @@ class ytMention(commands.Cog):
     @commands.command()
     async def ytMention(self, ctx):
         
-        if ctx.message.author.guild_permissions.administrator:
+        if not ctx.message.author.guild_permissions.administrator:
             await ctx.channel.send('你沒有此權限')
             return
         
