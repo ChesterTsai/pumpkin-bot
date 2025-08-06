@@ -45,7 +45,7 @@ class ytMention(commands.Cog):
         
         await ctx.send("請接收通知的discord頻道ID")
         notifying_discord_channel = await self.bot.wait_for("message", check = check)
-        notifying_discord_channel = int(notifying_discord_channel.content)
+        notifying_discord_channel = notifying_discord_channel.content
         
         writeData(handle, channel_name, who_to_mention, notifying_discord_channel)
         await ctx.send("寫入成功!")
@@ -128,12 +128,14 @@ def readData():
             f.close()
     return data
 
-def writeData(handle: str, channel_name: str, who_to_mention: str, notifying_discord_channel: int):
+def writeData(handle: str, channel_name: str, who_to_mention: str, notifying_discord_channel: str):
     data = readData()
     
     data[handle] = {
         "channel_name": channel_name,
         "who_to_mention": who_to_mention,
+        "latest_video_url": "",
+        "latest_shorts_url": "",
         "notifying_discord_channel": notifying_discord_channel
     }
     
