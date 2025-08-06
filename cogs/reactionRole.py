@@ -8,16 +8,30 @@ class reactionRole(commands.Cog):
         警告：拜託別把機器人身分組拉到最上面，給他高於自動給的身分組就好
         Warning: Please DO NOT make the bot role the highest role,
         only make it higher than the reaction role
-        
-        用法：addRole [訊息ID] [貼圖ID] [身分組名稱]
     """
     def __init__(self, bot):
         self.bot = bot
     
     @commands.command()
-    async def addRole(self, ctx, messageID :str, emoji_id :int, role_name :str):
-        """輸入"help reactionRole"以獲取更多資訊"""
+    async def addRole(self, ctx):
+
         if ctx.message.author.guild_permissions.administrator:
+            #check if the author of the text is the same person.
+            def check(msg):
+                return msg.author == ctx.author and msg.channel == ctx.channel
+            
+            await ctx.send("請輸入要加入反應的訊息ID")
+            messageID = await self.bot.wait_for("message", check = check)
+            messageID = messageID.content
+            
+            await ctx.send("請輸入貼圖ID")
+            emoji_id = await self.bot.wait_for("message", check = check)
+            emoji_id = int(emoji_id.content)
+            
+            await ctx.send("請輸入身分組名稱")
+            role_name = await self.bot.wait_for("message", check = check)
+            role_name = role_name.content
+            
             writeData(messageID, emoji_id, role_name)
             await ctx.send("寫入成功!")
         else:
@@ -64,11 +78,21 @@ class reactionRole(commands.Cog):
 async def setup(bot):
     await bot.add_cog(reactionRole(bot))
 
+def readData():
+    
+    try:
+        with open("./data/reactionRole.json", "r", encoding='utf-8') as f:
+            data = json.load(f)
+            f.close()
+    except FileNotFoundError:
+        with open("./data/reactionRole.json", 'w', encoding='utf-8') as f:
+            f.write("")
+            data = ""
+            f.close()
+    return data
 
 def writeData(messageID :str, emoji_id :int, role_name :str):
-    with open("./data/reactionRole.json", "r", encoding='utf-8') as f:
-        data = json.load(f)
-        f.close()
+    data = readData()
     
     data[messageID] = {
         "emoji_id": emoji_id,
@@ -78,9 +102,3 @@ def writeData(messageID :str, emoji_id :int, role_name :str):
     with open("./data/reactionRole.json", "w", encoding='utf-8') as f:
         json.dump(data, f, indent = 4)
         f.close()
-
-def readData():
-    with open("./data/reactionRole.json", "r", encoding='utf-8') as f:
-        data = json.load(f)
-        f.close()
-    return data
