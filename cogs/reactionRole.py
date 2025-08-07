@@ -26,6 +26,11 @@ class reactionRole(commands.Cog):
         await ctx.send("請輸入要加入反應的訊息ID")
         messageID = await self.bot.wait_for("message", check = check)
         messageID = messageID.content
+        try:
+            message = await ctx.fetch_message(int(messageID))
+        except:
+            await ctx.channel.send("錯誤的訊息ID或非相同伺服器的訊息")
+            return
         
         await ctx.send("請輸入貼圖ID")
         emoji_id = await self.bot.wait_for("message", check = check)

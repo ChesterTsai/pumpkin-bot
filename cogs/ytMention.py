@@ -46,6 +46,13 @@ class ytMention(commands.Cog):
         await ctx.send("請接收通知的discord頻道ID")
         notifying_discord_channel = await self.bot.wait_for("message", check = check)
         notifying_discord_channel = notifying_discord_channel.content
+        if not self.bot.get_channel(int(notifying_discord_channel)):
+            await ctx.channel.send('錯誤的頻道ID')
+            return
+        notifying_discord_guild = self.bot.get_channel(int(notifying_discord_channel)).guild.id
+        if notifying_discord_guild != ctx.guild.id:
+            await ctx.channel.send('基於安全性原因，請勿對其他伺服器的頻道進行操作')
+            return
         
         writeData(handle, channel_name, who_to_mention, notifying_discord_channel)
         await ctx.send("寫入成功!")
