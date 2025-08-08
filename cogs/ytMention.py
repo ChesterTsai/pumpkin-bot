@@ -38,10 +38,12 @@ class ytMention(commands.Cog):
         who_to_mention_msg = "你想要通知哪些人？"
         who_to_mention_msg += "\n\t輸入「everyone」 -> 通知所有人"
         who_to_mention_msg += "\n\t輸入「none」 -> 純文字通知"
-        who_to_mention_msg += "\n\t輸入身分組ID(@該身分組並在最前面加上一個「/」後enter) -> 通知該身分組"
+        who_to_mention_msg += "\n\t輸入身分組ID(@該身分組並在最前面加上一個「\\」後enter) -> 通知該身分組"
         await ctx.send(who_to_mention_msg)
         who_to_mention = await self.bot.wait_for("message", check = check)
         who_to_mention = who_to_mention.content
+        if who_to_mention.startswith("\\<@&"):
+            who_to_mention = who_to_mention[4:-1]
         
         await ctx.send("請接收通知的discord頻道ID")
         notifying_discord_channel = await self.bot.wait_for("message", check = check)
