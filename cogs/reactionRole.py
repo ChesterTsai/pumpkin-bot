@@ -29,7 +29,7 @@ class reactionRole(commands.Cog):
         try:
             message = await ctx.fetch_message(int(messageID))
         except:
-            await ctx.channel.send("錯誤的訊息ID或非相同伺服器的訊息")
+            await ctx.channel.send("錯誤的訊息ID或非相同頻道的訊息")
             return
         
         await ctx.send("請輸入貼圖ID")
@@ -42,6 +42,8 @@ class reactionRole(commands.Cog):
         
         writeData(messageID, emoji_id, role_name)
         await ctx.send("寫入成功!")
+        
+        await message.add_reaction(discord.utils.get(self.bot.emojis, id = emoji_id))
     
     @commands.Cog.listener()
     async def on_raw_reaction_add(self, payload):        
