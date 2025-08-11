@@ -94,8 +94,8 @@ def readData():
             f.close()
     except FileNotFoundError:
         with open("./data/reactionRole.json", 'w', encoding='utf-8') as f:
-            f.write("")
-            data = ""
+            f.write("{}")
+            data = {}
             f.close()
     return data
 
