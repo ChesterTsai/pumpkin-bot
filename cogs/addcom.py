@@ -22,6 +22,18 @@ class addcom(commands.Cog):
         removeData(guildID, cmdName)
         await ctx.send(f"成功移除指令:\t!{cmdName}")
 
+    @commands.command()
+    async def helpcom(self, ctx):
+        """查看此群的自訂指令"""
+        data = readData()
+        msg = f"此群的自訂指令列表:\n"
+        for guildID in data:
+            if ctx.guild.id != int(guildID):
+                continue
+            for cmdName in data[guildID]:
+                msg += f"\t!{cmdName} : {data[guildID][cmdName]}\n"
+        await ctx.send(msg)
+
     @commands.Cog.listener()
     async def on_message(self, msg):
         if msg.author.bot:
