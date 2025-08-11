@@ -9,11 +9,19 @@ class addcom(commands.Cog):
         self.bot = bot
     
     @commands.command()
-    async def addcom(self, ctx, cmdName, cmdRespon):
-        guildID = ctx.guild.id
+    async def addcom(self, ctx, cmdName, *, cmdRespon):
+        """用法：addcom [指令名] [指令內容]"""
+        guildID = str(ctx.guild.id)
         writeData(guildID, cmdName, cmdRespon)
         await ctx.send(f"成功新增指令:\t!{cmdName}")
-        
+
+    @commands.command()
+    async def delcom(self, ctx, cmdName):
+        """用法：delcom [指令名]"""
+        guildID = str(ctx.guild.id)
+        removeData(guildID, cmdName)
+        await ctx.send(f"成功移除指令:\t!{cmdName}")
+
     @commands.Cog.listener()
     async def on_message(self, msg):
         if msg.author.bot:
@@ -48,12 +56,25 @@ def readData():
             f.close()
     return data
 
-def writeData(guildID: int, cmdName: str, cmdRespon: str):
+def writeData(guildID: str, cmdName: str, cmdRespon: str):
     data = readData()
     
-    data[guildID] = {
-        cmdName : cmdRespon
-    }
+    try:
+        bool(data[guildID])
+        data[guildID][cmdName] = cmdRespon
+    except KeyError:
+        data.update({guildID : {cmdName : cmdRespon}})
+    
+    with open(file_location, "w", encoding='utf-8') as f:
+        json.dump(data, f, indent = 4)
+        f.close()
+
+def removeData(guildID: str, cmdName: str):
+    data = readData()
+    
+    del data[guildID][cmdName]
+    if not bool(data[guildID]):
+        del data[guildID]
     
     with open(file_location, "w", encoding='utf-8') as f:
         json.dump(data, f, indent = 4)
