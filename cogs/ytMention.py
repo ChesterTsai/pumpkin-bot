@@ -59,7 +59,7 @@ class ytMention(commands.Cog):
         writeData(handle, channel_name, who_to_mention, notifying_discord_channel)
         await ctx.send("寫入成功!")
     
-    @tasks.loop(seconds=30)
+    @tasks.loop(minutes=5)
     async def ytMentionLoop(self):
         data = readData()
         
@@ -118,8 +118,6 @@ class ytMention(commands.Cog):
 
                 await discord_channel.send(msg)
                 print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] New Shorts Info Sent!')
-        
-        # time.sleep(300)
 
 async def setup(bot):
     await bot.add_cog(ytMention(bot))
