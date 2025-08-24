@@ -23,7 +23,7 @@ class addcom(commands.Cog):
         await ctx.send(f"成功移除指令:\t!{cmdName}")
 
     @commands.command()
-    async def helpcom(self, ctx):
+    async def comlist(self, ctx):
         """查看此群的自訂指令"""
         data = readData()
         msg = f"此群的自訂指令列表:\n"
