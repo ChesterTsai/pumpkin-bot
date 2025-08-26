@@ -45,6 +45,13 @@ class ytMention(commands.Cog):
         if who_to_mention.startswith("\\<@&"):
             who_to_mention = who_to_mention[4:-1]
         
+        await ctx.send("是否傳送影片縮圖 (Y/n)")
+        sendThumbnail = await self.bot.wait_for("message", check = check)
+        sendThumbnail = sendThumbnail.content
+        if sendThumbnail.lower() != "y" and sendThumbnail.lower() != "n":
+            await ctx.channel.send('錯誤的選項')
+            return
+        
         await ctx.send("請接收通知的discord頻道ID")
         notifying_discord_channel = await self.bot.wait_for("message", check = check)
         notifying_discord_channel = notifying_discord_channel.content
@@ -56,7 +63,7 @@ class ytMention(commands.Cog):
             await ctx.channel.send('基於安全性原因，請勿對其他伺服器的頻道進行操作')
             return
         
-        writeData(handle, channel_name, who_to_mention, notifying_discord_channel)
+        writeData(handle, channel_name, who_to_mention, sendThumbnail.lower(), notifying_discord_channel)
         await ctx.send("寫入成功!")
     
     @tasks.loop(minutes=5)
@@ -96,10 +103,20 @@ class ytMention(commands.Cog):
 
                 discord_channel_id = data[str(youtube_channel)]["notifying_discord_channel"]
                 discord_channel = self.bot.get_channel(int(discord_channel_id))
-
-                msg = f"{who_to_mention} {channel_name}發布了新影片!\n{latest_video_url}"
-
-                await discord_channel.send(msg)
+                sendThumbnail = data[str(youtube_channel)]["sendThumbnail"]
+                
+                msg = f"{who_to_mention} {channel_name}發布了新影片!\n"
+                if sendThumbnail == "y":
+                    video_id = latest_video_url.split("https://www.youtube.com/watch?v=")
+                    video_id = video_id[1]
+                    thumbnail_url = "http://img.youtube.com/vi/%s/maxresdefault.jpg" % video_id
+                    msg = msg + f"<{latest_video_url}>"
+                    await discord_channel.send(msg)
+                    await discord_channel.send(f"{thumbnail_url}")
+                else:
+                    msg = msg + f"{latest_video_url}"
+                    await discord_channel.send(msg)
+                
                 print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] New Video Info Sent!')
         
             # New Shorts Mentioning
@@ -135,7 +152,7 @@ def readData():
             f.close()
     return data
 
-def writeData(handle: str, channel_name: str, who_to_mention: str, notifying_discord_channel: str):
+def writeData(handle: str, channel_name: str, who_to_mention: str, sendThumbnail: str, notifying_discord_channel: str):
     data = readData()
     
     data[handle] = {
@@ -143,6 +160,7 @@ def writeData(handle: str, channel_name: str, who_to_mention: str, notifying_dis
         "who_to_mention": who_to_mention,
         "latest_video_url": "",
         "latest_shorts_url": "",
+        "sendThumbnail": sendThumbnail,
         "notifying_discord_channel": notifying_discord_channel
     }
     
