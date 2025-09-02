@@ -10,14 +10,14 @@ class addcom(commands.Cog):
     
     @commands.command()
     async def addcom(self, ctx, cmdName, *, cmdRespon):
-        """用法：addcom [指令名] [指令內容]"""
+        """新增/修改指令，用法：addcom [指令名] [指令內容]"""
         guildID = str(ctx.guild.id)
         writeData(guildID, cmdName, cmdRespon)
         await ctx.send(f"成功新增指令:\t!{cmdName}")
 
     @commands.command()
     async def delcom(self, ctx, cmdName):
-        """用法：delcom [指令名]"""
+        """刪除指令，用法：delcom [指令名]"""
         guildID = str(ctx.guild.id)
         removeData(guildID, cmdName)
         await ctx.send(f"成功移除指令:\t!{cmdName}")
