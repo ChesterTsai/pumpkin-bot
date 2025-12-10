@@ -2,11 +2,11 @@ import discord
 from discord.ext import commands
 import random
 
-class greetings(commands.Cog):
+class greeting(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.command(aliases = ['安安', '你好', '嗨', 'HI', 'hi'])
+    @commands.command(aliases = ['安安', '你好', '嗨', 'HI', 'hi'], hidden=True)
     async def Hi(self, ctx):
         """跟機器人打招呼"""
         
@@ -22,4 +22,4 @@ class greetings(commands.Cog):
         await ctx.send(f'{random.choice(responses)}')
 
 async def setup(bot):
-    await bot.add_cog(greetings(bot))
+    await bot.add_cog(greeting(bot))

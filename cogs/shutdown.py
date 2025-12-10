@@ -8,7 +8,7 @@ class shutdown(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.command()
+    @commands.command(hidden=True)
     async def shutdown(self, ctx, reason: str = ''):
         """用法：shutdown (原因)"""
         
