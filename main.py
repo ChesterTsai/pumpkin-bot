@@ -33,7 +33,7 @@ async def loadCogOnStartUp():
         if filename.endswith(".py"):
             await bot.load_extension(f"cogs.{filename[:-3]}")
 
-@bot.command()
+@bot.command(hidden=True)
 async def load(ctx, cog: str):
     """load a newly added cog"""
     
@@ -57,7 +57,7 @@ async def load(ctx, cog: str):
     await bot.load_extension(f"cogs.{cog}")
     await ctx.send("已載入")
 
-@bot.command()
+@bot.command(hidden=True)
 async def reload(ctx, cog: str):
     """reload certain cog"""
     
@@ -81,7 +81,7 @@ async def reload(ctx, cog: str):
     await bot.reload_extension(f"cogs.{cog}")
     await ctx.send("已刷新")
 
-@bot.command()
+@bot.command(hidden=True)
 async def unload(ctx, cog: str):
     """unload certain cog"""
     
