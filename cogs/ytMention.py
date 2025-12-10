@@ -135,7 +135,11 @@ class ytMention(commands.Cog):
 
                 await discord_channel.send(msg)
                 print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] New Shorts Info Sent!')
-
+    
+    @ytMentionLoop.before_loop
+    async def before_loop(self):
+        await self.bot.wait_until_ready()
+    
 async def setup(bot):
     await bot.add_cog(ytMention(bot))
 
