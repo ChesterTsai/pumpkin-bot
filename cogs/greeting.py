@@ -6,7 +6,7 @@ class greeting(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
     
-    @commands.command(aliases = ['安安', '你好', '嗨', 'HI', 'hi'], hidden=True)
+    @commands.command(aliases = ['安安', '你好', '嗨'], hidden=True)
     async def Hi(self, ctx):
         """跟機器人打招呼"""
         

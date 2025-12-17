@@ -1,6 +1,7 @@
 Admin.txt
 __pycache__/
 .env
+nohup.out
 
 checkMsg.py
 loops.py
