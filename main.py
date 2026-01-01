@@ -20,7 +20,7 @@ bot = commands.Bot(command_prefix = '', intents = discord.Intents.all(), case_in
 
 @bot.event
 async def on_ready():
-    await bot.change_presence(status=discord.Status.dnd, activity=discord.Activity(type=discord.ActivityType.watching, name="A片"))
+    await bot.change_presence(activity=discord.CustomActivity(name=f'今年已經過了{int((time.time() / 315576) % 100)}%'))
     print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] Bot is ready')
 
 @bot.event
