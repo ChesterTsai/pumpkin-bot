@@ -25,16 +25,21 @@ class tellTime(commands.Cog):
     @tasks.loop(seconds = 1)
     async def tellTimeLoop(self):
         subbedChannel = readData()
+        print(subbedChannel)
         if str(datetime.datetime.now().strftime("%m,%d,%H,%M,%S")) == "01,01,00,00,00":
             msg = f'今年已經過了100%，新年快樂！'
             await self.bot.change_presence(activity=discord.CustomActivity(name=msg))
             for channelID in subbedChannel:
+                if channelID.isdigit():
+                    return
                 await self.bot.get_channel(int(channelID)).send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] {msg}')
             time.sleep(1)
         if int(time.time()) % 315576 == 0:
             msg = f'今年已經過了{int((time.time() / 315576) % 100)}%'
             await self.bot.change_presence(activity=discord.CustomActivity(name=msg))
             for channelID in subbedChannel:
+                if channelID.isdigit():
+                    return
                 await self.bot.get_channel(int(channelID)).send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] {msg}')
             time.sleep(1)
 
@@ -73,6 +78,7 @@ def removeData(channelID: int):
     data = readData()
     if str(channelID) in data:
         data.remove(str(channelID))
+    data = [x for x in data if x.strip()]
     newData = ""
     for i in data:
         newData = newData + i + "\n"
