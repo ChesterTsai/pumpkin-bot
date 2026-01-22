@@ -29,13 +29,13 @@ class tellTime(commands.Cog):
             msg = f'今年已經過了100%，新年快樂！'
             await self.bot.change_presence(activity=discord.CustomActivity(name=msg))
             for channelID in subbedChannel:
-                await self.bot.get_channel(channelID).send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] {msg}')
+                await self.bot.get_channel(int(channelID)).send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] {msg}')
             time.sleep(1)
         if int(time.time()) % 315576 == 0:
             msg = f'今年已經過了{int((time.time() / 315576) % 100)}%'
             await self.bot.change_presence(activity=discord.CustomActivity(name=msg))
             for channelID in subbedChannel:
-                await self.bot.get_channel(channelID).send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] {msg}')
+                await self.bot.get_channel(int(channelID)).send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] {msg}')
             time.sleep(1)
 
     @tellTimeLoop.before_loop
