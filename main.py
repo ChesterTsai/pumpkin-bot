@@ -4,6 +4,23 @@
 """
 #https://discord.com/api/oauth2/authorize?bot_id=915579282439434280&permissions=8&scope=bot
 
+"""
+
+put a cat here, pray for no errors in my code.
+
+　　　　 　　 ＿＿
+　　　 　　／＞　　フ
+　　　 　　| 　_　 _ l
+　 　　 　／` ミ＿xノ
+　　 　 /　　　 　 |
+　　　 /　 ヽ　　 ﾉ
+　 　 │　　|　|　|
+　／￣|　　 |　|　|
+　| (￣ヽ＿_ヽ_)__)
+　＼二つ
+"""
+
+
 import discord
 from discord.ext import commands
 from discord.ext import tasks

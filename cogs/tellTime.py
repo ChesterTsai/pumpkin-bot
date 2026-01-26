@@ -25,12 +25,25 @@ class tellTime(commands.Cog):
     @tasks.loop(seconds = 1)
     async def tellTimeLoop(self):
         subbedChannel = readData()
-        print(subbedChannel)
+
+
+
+        # This is just a daily test so I don't need to wait 3 days to get one result
+        if str(datetime.datetime.now().strftime("%H,%M,%S")) == "03,00,00":
+            for channelID in subbedChannel:
+                if not channelID.isdigit():
+                    return
+                await self.bot.get_channel(int(channelID)).send("誰會在半夜三點吃美味蟹堡阿")
+                await self.bot.get_channel(int(channelID)).send("https://i.imgur.com/FTmKIoE.jpg")
+                time.sleep(1)
+
+
+
         if str(datetime.datetime.now().strftime("%m,%d,%H,%M,%S")) == "01,01,00,00,00":
             msg = f'今年已經過了100%，新年快樂！'
             await self.bot.change_presence(activity=discord.CustomActivity(name=msg))
             for channelID in subbedChannel:
-                if channelID.isdigit():
+                if not channelID.isdigit():
                     return
                 await self.bot.get_channel(int(channelID)).send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] {msg}')
             time.sleep(1)
@@ -38,7 +51,7 @@ class tellTime(commands.Cog):
             msg = f'今年已經過了{int((time.time() / 315576) % 100)}%'
             await self.bot.change_presence(activity=discord.CustomActivity(name=msg))
             for channelID in subbedChannel:
-                if channelID.isdigit():
+                if not channelID.isdigit():
                     return
                 await self.bot.get_channel(int(channelID)).send(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] {msg}')
             time.sleep(1)
