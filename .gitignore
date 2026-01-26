@@ -4,8 +4,6 @@ __pycache__/
 nohup.out
 
 checkMsg.py
-loops.py
-backdoor.py
 
 notImportant.py
 dinner.txt
