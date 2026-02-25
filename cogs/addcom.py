@@ -12,6 +12,8 @@ class addcom(commands.Cog):
     async def addcom(self, ctx, cmdName, *, cmdRespon):
         """新增/修改指令，用法：addcom [指令名] [指令內容]"""
         guildID = str(ctx.guild.id)
+        if str(cmdName).startswith("!"):
+            cmdName = cmdName[1:]
         writeData(guildID, cmdName, cmdRespon)
         await ctx.send(f"成功新增指令:\t!{cmdName}")
 
@@ -19,6 +21,8 @@ class addcom(commands.Cog):
     async def delcom(self, ctx, cmdName):
         """刪除指令，用法：delcom [指令名]"""
         guildID = str(ctx.guild.id)
+        if str(cmdName).startswith("!"):
+            cmdName = cmdName[1:]
         removeData(guildID, cmdName)
         await ctx.send(f"成功移除指令:\t!{cmdName}")
 
