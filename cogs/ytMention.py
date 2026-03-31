@@ -118,6 +118,14 @@ class ytMention(commands.Cog):
                     await discord_channel.send(msg)
                 
                 print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] New Video Info Sent!')
+
+            # Skip Shorts Mentioning if the page don't have shorts
+            video_id = latest_video_url.split("https://www.youtube.com/watch?v=")
+            video_id = video_id[1]
+            shorts_id = latest_shorts_url.split("https://www.youtube.com/shorts/")
+            shorts_id = shorts_id[1]
+            if video_id == shorts_id:
+                return
         
             # New Shorts Mentioning
             if not str(data[youtube_channel]["latest_shorts_url"]) == latest_shorts_url:
