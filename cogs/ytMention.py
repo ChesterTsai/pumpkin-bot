@@ -16,6 +16,7 @@ class ytMention(commands.Cog):
     
     @commands.command()
     async def ytMention(self, ctx):
+        """設定Youtube發片通知"""
         
         if not ctx.message.author.guild_permissions.administrator:
             await ctx.channel.send('你沒有此權限')
@@ -65,7 +66,7 @@ class ytMention(commands.Cog):
         
         writeData(handle, channel_name, who_to_mention, sendThumbnail.lower(), notifying_discord_channel)
         await ctx.send("寫入成功!")
-    
+
     @tasks.loop(minutes=5)
     async def ytMentionLoop(self):
         data = readData()
