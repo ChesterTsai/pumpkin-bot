@@ -26,12 +26,29 @@ class ytMention(commands.Cog):
         def check(msg):
             return msg.author == ctx.author and msg.channel == ctx.channel
         
-        await ctx.send("請輸入Youtube帳號代碼(@XXXX)")
-        handle = await self.bot.wait_for("message", check = check)
-        handle = handle.content
-        if handle.startswith("@"):
-            handle = handle[1:]
-        
+        await ctx.send("請輸入Youtube頻道網址")
+        channel_link = await self.bot.wait_for("message", check = check)
+        channel_link = channel_link.content
+
+        if channel_link.endswith("/featured"):
+            channel_link = channel_link.split("/featured")
+            channel_link = channel_link[0]
+        elif channel_link.endswith("/videos"):
+            channel_link = channel_link.split("/videos")
+            channel_link = channel_link[0]
+        elif channel_link.endswith("/shorts"):
+            channel_link = channel_link.split("/shorts")
+            channel_link = channel_link[0]
+        elif channel_link.endswith("/streams"):
+            channel_link = channel_link.split("/streams")
+            channel_link = channel_link[0]
+        elif channel_link.endswith("/playlists"):
+            channel_link = channel_link.split("/playlists")
+            channel_link = channel_link[0]
+        elif channel_link.endswith("/posts"):
+            channel_link = channel_link.split("/posts")
+            channel_link = channel_link[0]
+
         await ctx.send("請輸入頻道名稱(新影片發布時機器人稱呼你的方法)")
         channel_name = await self.bot.wait_for("message", check = check)
         channel_name = channel_name.content
@@ -64,7 +81,7 @@ class ytMention(commands.Cog):
             await ctx.channel.send('基於安全性原因，請勿對其他伺服器的頻道進行操作')
             return
         
-        writeData(handle, channel_name, who_to_mention, sendThumbnail.lower(), notifying_discord_channel)
+        writeData(channel_link, channel_name, who_to_mention, sendThumbnail.lower(), notifying_discord_channel)
         await ctx.send("寫入成功!")
 
     @tasks.loop(minutes=5)
@@ -72,7 +89,7 @@ class ytMention(commands.Cog):
         data = readData()
         
         for youtube_channel in data:
-            channel = f"https://www.youtube.com/@{youtube_channel}"
+            channel = youtube_channel
             channel_name = data[youtube_channel]["channel_name"]
             who_to_mention = data[youtube_channel]["who_to_mention"]
             
@@ -165,10 +182,10 @@ def readData():
             f.close()
     return data
 
-def writeData(handle: str, channel_name: str, who_to_mention: str, sendThumbnail: str, notifying_discord_channel: str):
+def writeData(channel_link: str, channel_name: str, who_to_mention: str, sendThumbnail: str, notifying_discord_channel: str):
     data = readData()
     
-    data[handle] = {
+    data[channel_link] = {
         "channel_name": channel_name,
         "who_to_mention": who_to_mention,
         "latest_video_url": "",
