@@ -30,6 +30,10 @@ class ytMention(commands.Cog):
         channel_link = await self.bot.wait_for("message", check = check)
         channel_link = channel_link.content
 
+        if "?" in channel_link:
+            channel_link = channel_link.split("?")
+            channel_link = channel_link[0]
+
         if channel_link.endswith("/featured"):
             channel_link = channel_link.split("/featured")
             channel_link = channel_link[0]
