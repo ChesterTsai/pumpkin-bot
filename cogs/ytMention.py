@@ -96,7 +96,9 @@ class ytMention(commands.Cog):
             channel = youtube_channel
             channel_name = data[youtube_channel]["channel_name"]
             who_to_mention = data[youtube_channel]["who_to_mention"]
-            
+            discord_channel_id = data[str(youtube_channel)]["notifying_discord_channel"]
+            sendThumbnail = data[str(youtube_channel)]["sendThumbnail"]
+
             match who_to_mention:
                 case "everyone":
                     who_to_mention = "@everyone"
@@ -107,10 +109,12 @@ class ytMention(commands.Cog):
             
             videos = requests.get(channel+"/videos").text
             shorts = requests.get(channel+"/shorts").text
+            streams = requests.get(channel+"/streams").text
             
             try:
                 latest_video_url = "https://www.youtube.com/watch?v=" + re.search('(?<="videoId":").*?(?=")', videos).group()
                 latest_shorts_url = "https://www.youtube.com/shorts/" + re.search('(?<="videoId":").*?(?=")', shorts).group()
+                latest_streams_url = "https://www.youtube.com/live/" + re.search('(?<="videoId":").*?(?=")', streams).group()
             except:
                 continue
         
@@ -123,21 +127,17 @@ class ytMention(commands.Cog):
                     json.dump(data, f, indent = 4)
                     f.close()
 
-                discord_channel_id = data[str(youtube_channel)]["notifying_discord_channel"]
-                discord_channel = self.bot.get_channel(int(discord_channel_id))
-                sendThumbnail = data[str(youtube_channel)]["sendThumbnail"]
-                
                 msg = f"{who_to_mention} {channel_name}發布了新影片!\n"
                 if sendThumbnail == "y":
                     video_id = latest_video_url.split("https://www.youtube.com/watch?v=")
                     video_id = video_id[1]
                     thumbnail_url = "http://img.youtube.com/vi/%s/maxresdefault.jpg" % video_id
                     msg = msg + f"<{latest_video_url}>"
-                    await discord_channel.send(msg)
-                    await discord_channel.send(f"{thumbnail_url}")
+                    await self.bot.get_channel(int(discord_channel_id)).send(msg)
+                    await self.bot.get_channel(int(discord_channel_id)).send(f"{thumbnail_url}")
                 else:
                     msg = msg + f"{latest_video_url}"
-                    await discord_channel.send(msg)
+                    await self.bot.get_channel(int(discord_channel_id)).send(msg)
                 
                 print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] New Video Info Sent!')
 
@@ -146,26 +146,43 @@ class ytMention(commands.Cog):
             video_id = video_id[1]
             shorts_id = latest_shorts_url.split("https://www.youtube.com/shorts/")
             shorts_id = shorts_id[1]
-            if video_id == shorts_id:
-                return
-        
-            # New Shorts Mentioning
-            if not str(data[youtube_channel]["latest_shorts_url"]) == latest_shorts_url:
+            if video_id != shorts_id:
+      
+                # New Shorts Mentioning
+                if not str(data[youtube_channel]["latest_shorts_url"]) == latest_shorts_url:
 
-                data[str(youtube_channel)]["latest_shorts_url"] = latest_shorts_url
+                    data[str(youtube_channel)]["latest_shorts_url"] = latest_shorts_url
 
-                with open(file_location, "w", encoding='utf-8') as f:
-                    json.dump(data, f, indent = 4)
-                    f.close()
+                    with open(file_location, "w", encoding='utf-8') as f:
+                        json.dump(data, f, indent = 4)
+                        f.close()
 
-                discord_channel_id = data[str(youtube_channel)]["notifying_discord_channel"]
-                discord_channel = self.bot.get_channel(int(discord_channel_id))
+                    msg = f"{who_to_mention} {channel_name}發布了新的shorts!\n{latest_shorts_url}"
 
-                msg = f"{who_to_mention} {channel_name}發布了新的shorts!\n{latest_shorts_url}"
+                    await self.bot.get_channel(int(discord_channel_id)).send(msg)
+                    print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] New Shorts Info Sent!')
 
-                await discord_channel.send(msg)
-                print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] New Shorts Info Sent!')
-    
+            # Skip Streams Mentioning if the page don't have streams
+            featured = requests.get(channel+"/featured").text
+            featured_id = re.search('(?<="videoId":").*?(?=")', featured).group()
+            streams_id = latest_streams_url.split("https://www.youtube.com/live/")
+            streams_id = streams_id[1]
+            if featured_id != streams_id:
+
+                # New Streams Mentioning
+                if not str(data[youtube_channel]["latest_streams_url"]) == latest_streams_url:
+
+                    data[str(youtube_channel)]["latest_streams_url"] = latest_streams_url
+
+                    with open(file_location, "w", encoding='utf-8') as f:
+                        json.dump(data, f, indent = 4)
+                        f.close()
+
+                    msg = f"{who_to_mention} {channel_name}開台了!\n{latest_streams_url}"
+
+                    await self.bot.get_channel(int(discord_channel_id)).send(msg)
+                    print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] New Streams Info Sent!')
+
     @ytMentionLoop.before_loop
     async def before_loop(self):
         await self.bot.wait_until_ready()
@@ -194,6 +211,7 @@ def writeData(channel_link: str, channel_name: str, who_to_mention: str, sendThu
         "who_to_mention": who_to_mention,
         "latest_video_url": "",
         "latest_shorts_url": "",
+        "latest_streams_url": "",
         "sendThumbnail": sendThumbnail,
         "notifying_discord_channel": notifying_discord_channel
     }
