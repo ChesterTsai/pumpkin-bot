@@ -128,6 +128,7 @@ class ytMention(commands.Cog):
                     f.close()
 
                 msg = f"{who_to_mention} {channel_name}發布了新影片!\n"
+                msg += f"{channel_name} has uploaded a new video!\n"
                 if sendThumbnail == "y":
                     video_id = latest_video_url.split("https://www.youtube.com/watch?v=")
                     video_id = video_id[1]
@@ -157,7 +158,8 @@ class ytMention(commands.Cog):
                         json.dump(data, f, indent = 4)
                         f.close()
 
-                    msg = f"{who_to_mention} {channel_name}發布了新的shorts!\n{latest_shorts_url}"
+                    msg = f"{who_to_mention} {channel_name}發布了新的shorts!\n"
+                    msg += f"{channel_name} has uploaded a new short!\n{latest_shorts_url}"
 
                     await self.bot.get_channel(int(discord_channel_id)).send(msg)
                     print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] New Shorts Info Sent!')
@@ -178,7 +180,8 @@ class ytMention(commands.Cog):
                         json.dump(data, f, indent = 4)
                         f.close()
 
-                    msg = f"{who_to_mention} {channel_name}開台了!\n{latest_streams_url}"
+                    msg = f"{who_to_mention} {channel_name}開台了!\n"
+                    msg += f"{channel_name} has went on live!\n{latest_streams_url}"
 
                     await self.bot.get_channel(int(discord_channel_id)).send(msg)
                     print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] New Streams Info Sent!')
