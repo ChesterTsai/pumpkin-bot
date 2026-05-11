@@ -3,7 +3,7 @@
 [English Version of README](/README_EN.md)
 
 ### 邀請機器人進服
-[邀請連結](https://discord.com/api/oauth2/authorize?client_id=915579282439434280&permissions=8&scope=bot)
+[邀請連結](https://discord.com/oauth2/authorize?client_id=915579282439434280)
 
 ### Prerequisites
 運行`pip3 install -r requirements.txt`來下載所需的程序依賴<br>
