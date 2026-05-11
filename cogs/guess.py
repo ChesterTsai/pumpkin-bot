@@ -117,13 +117,15 @@ async def setup(bot):
     await bot.add_cog(guess(bot))
 
 
-
-with open("./data/variables.json", "r", encoding='utf-8') as f:
-    data = json.load(f)
-    f.close()
+def readData():
+    with open("./data/variables.json", "r", encoding='utf-8') as f:
+        data = json.load(f)
+        f.close()
+    return data
 
 # 簡單模式
 def easy():
+    data = readData()
     min, max = data["easy"]["min"], data["easy"]["max"]
     chances = data["easy"]["chances"]
     timeGiven = data["easy"]["timeGiven"]
@@ -133,6 +135,7 @@ def easy():
 
 # 一般模式
 def normal():
+    data = readData()
     min, max = data["normal"]["min"], data["normal"]["max"]
     chances = data["normal"]["chances"]
     timeGiven = data["normal"]["timeGiven"]
@@ -142,6 +145,7 @@ def normal():
 
 # 困難模式
 def hard():
+    data = readData()
     min, max = data["hard"]["min"], data["hard"]["max"]
     chances = data["hard"]["chances"]
     timeGiven = data["hard"]["timeGiven"]
@@ -150,7 +154,8 @@ def hard():
     return (min, max, chances, timeGiven, giveHint)
 
 def guessGameAnswer(min, max):
-    
+
+    data = readData()
     old_ans = data["old_ans"]
 
     ans = random.randint(min, max)
