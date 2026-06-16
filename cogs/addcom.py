@@ -40,8 +40,6 @@ class addcom(commands.Cog):
 
     @commands.Cog.listener()
     async def on_message(self, msg):
-        if msg.author.bot:
-            return
 
         data = readData()
 
@@ -50,8 +48,11 @@ class addcom(commands.Cog):
                 continue
             if not msg.content.startswith("!"):
                 continue
+            cmd = msg.content
+            cmd = cmd.split(" ")
+            cmd = cmd[0]
             for cmdName in data[guildID]:
-                if msg.content[1:] != cmdName:
+                if cmd[1:] != cmdName:
                     continue
                 await msg.channel.send(data[guildID][cmdName])
         
