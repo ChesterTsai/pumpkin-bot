@@ -160,7 +160,7 @@ class ytMention(commands.Cog):
                             json.dump(data, f, indent = 4)
                             f.close()
 
-                        msg = f"{who_to_mention} {channel_name}發布了新的shorts!\n{latest_shorts_url}"
+                        msg = f"{who_to_mention} {channel_name}發布了新的shorts!\n"
                         msg += f"{channel_name} has uploaded a new short!\n{latest_shorts_url}"
 
                         await self.bot.get_channel(int(dc_id)).send(msg)
@@ -182,7 +182,7 @@ class ytMention(commands.Cog):
                             json.dump(data, f, indent = 4)
                             f.close()
 
-                        msg = f"{who_to_mention} {channel_name}開台了!\n{latest_streams_url}"
+                        msg = f"{who_to_mention} {channel_name}開台了!\n"
                         msg += f"{channel_name} has went on live!\n{latest_streams_url}"
 
                         await self.bot.get_channel(int(dc_id)).send(msg)
