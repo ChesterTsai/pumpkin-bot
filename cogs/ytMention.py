@@ -99,6 +99,7 @@ class ytMention(commands.Cog):
             for dc_id in discord_channel_id:
                 channel_name = data[youtube_channel][dc_id]["channel_name"]
                 who_to_mention = data[youtube_channel][dc_id]["who_to_mention"]
+                latest_upload_date = data[str(youtube_channel)][dc_id]["latest_upload_date"]
                 sendThumbnail = data[str(youtube_channel)][dc_id]["sendThumbnail"]
 
                 match who_to_mention:
@@ -115,13 +116,25 @@ class ytMention(commands.Cog):
 
                 try:
                     latest_video_url = "https://www.youtube.com/watch?v=" + re.search('(?<="videoId":").*?(?=")', videos).group()
+                    latest_video_info = requests.get(latest_video_url).text
+                    video_upload_date = re.search('(?<="uploadDate":").*?(?=")', latest_video_info).group()
+
                     latest_shorts_url = "https://www.youtube.com/shorts/" + re.search('(?<="videoId":").*?(?=")', shorts).group()
+                    latest_shorts_info = requests.get(latest_shorts_url).text
+                    shorts_upload_date = re.search('(?<="uploadDate":").*?(?=")', latest_shorts_info).group()
+
                     latest_streams_url = "https://www.youtube.com/live/" + re.search('(?<="videoId":").*?(?=")', streams).group()
+                    latest_streams_info = requests.get(latest_streams_url).text
+                    stream_date = re.search('(?<="uploadDate":").*?(?=")', latest_streams_info).group()
+
+                    upload_date = max([video_upload_date, shorts_upload_date, stream_date])
                 except:
                     continue
 
                 # New Video Mentioning
-                if not str(data[youtube_channel][dc_id]["latest_video_url"]) == latest_video_url:
+                if (str(data[youtube_channel][dc_id]["latest_video_url"]) != latest_video_url) and (upload_date > latest_upload_date):
+
+                    data[str(youtube_channel)][str(dc_id)]["latest_upload_date"] = upload_date
 
                     data[str(youtube_channel)][str(dc_id)]["latest_video_url"] = latest_video_url
 
@@ -152,7 +165,9 @@ class ytMention(commands.Cog):
                 if video_id != shorts_id:
 
                     # New Shorts Mentioning
-                    if not str(data[youtube_channel][dc_id]["latest_shorts_url"]) == latest_shorts_url:
+                    if (str(data[youtube_channel][dc_id]["latest_shorts_url"]) != latest_shorts_url) and (upload_date > latest_upload_date):
+
+                        data[str(youtube_channel)][str(dc_id)]["latest_upload_date"] = upload_date
 
                         data[str(youtube_channel)][str(dc_id)]["latest_shorts_url"] = latest_shorts_url
 
@@ -174,7 +189,9 @@ class ytMention(commands.Cog):
                 if featured_id != streams_id:
 
                     # New Streams Mentioning
-                    if not str(data[youtube_channel][dc_id]["latest_streams_url"]) == latest_streams_url:
+                    if (str(data[youtube_channel][dc_id]["latest_streams_url"]) != latest_streams_url) and (upload_date > latest_upload_date):
+
+                        data[str(youtube_channel)][str(dc_id)]["latest_upload_date"] = upload_date
 
                         data[str(youtube_channel)][str(dc_id)]["latest_streams_url"] = latest_streams_url
 
@@ -220,6 +237,7 @@ def writeData(channel_link: str, channel_name: str, who_to_mention: str, sendThu
             "latest_video_url": "",
             "latest_shorts_url": "",
             "latest_streams_url": "",
+            "latest_upload_date": "",
             "sendThumbnail": sendThumbnail
         }
     }
