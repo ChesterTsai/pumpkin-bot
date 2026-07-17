@@ -126,15 +126,13 @@ class ytMention(commands.Cog):
                     latest_streams_url = "https://www.youtube.com/live/" + re.search('(?<="videoId":").*?(?=")', streams).group()
                     latest_streams_info = requests.get(latest_streams_url).text
                     stream_date = re.search('(?<="uploadDate":").*?(?=")', latest_streams_info).group()
-
-                    upload_date = max([video_upload_date, shorts_upload_date, stream_date])
                 except:
                     continue
 
                 # New Video Mentioning
-                if (str(data[youtube_channel][dc_id]["latest_video_url"]) != latest_video_url) and (upload_date > latest_upload_date):
+                if (str(data[youtube_channel][dc_id]["latest_video_url"]) != latest_video_url) and (video_upload_date > latest_upload_date):
 
-                    data[str(youtube_channel)][str(dc_id)]["latest_upload_date"] = upload_date
+                    data[str(youtube_channel)][str(dc_id)]["latest_upload_date"] = video_upload_date
 
                     data[str(youtube_channel)][str(dc_id)]["latest_video_url"] = latest_video_url
 
@@ -165,9 +163,9 @@ class ytMention(commands.Cog):
                 if video_id != shorts_id:
 
                     # New Shorts Mentioning
-                    if (str(data[youtube_channel][dc_id]["latest_shorts_url"]) != latest_shorts_url) and (upload_date > latest_upload_date):
+                    if (str(data[youtube_channel][dc_id]["latest_shorts_url"]) != latest_shorts_url) and (shorts_upload_date > latest_upload_date):
 
-                        data[str(youtube_channel)][str(dc_id)]["latest_upload_date"] = upload_date
+                        data[str(youtube_channel)][str(dc_id)]["latest_upload_date"] = shorts_upload_date
 
                         data[str(youtube_channel)][str(dc_id)]["latest_shorts_url"] = latest_shorts_url
 
@@ -189,9 +187,9 @@ class ytMention(commands.Cog):
                 if featured_id != streams_id:
 
                     # New Streams Mentioning
-                    if (str(data[youtube_channel][dc_id]["latest_streams_url"]) != latest_streams_url) and (upload_date > latest_upload_date):
+                    if (str(data[youtube_channel][dc_id]["latest_streams_url"]) != latest_streams_url) and (stream_date > latest_upload_date):
 
-                        data[str(youtube_channel)][str(dc_id)]["latest_upload_date"] = upload_date
+                        data[str(youtube_channel)][str(dc_id)]["latest_upload_date"] = stream_date
 
                         data[str(youtube_channel)][str(dc_id)]["latest_streams_url"] = latest_streams_url
 
@@ -204,8 +202,6 @@ class ytMention(commands.Cog):
 
                         await self.bot.get_channel(int(dc_id)).send(msg)
                         print(f'[{datetime.datetime.now().strftime("%Y/%m/%d, %H:%M:%S")} INFO] New Streams Info Sent!')
-
-            time.sleep(30)
 
     @ytMentionLoop.before_loop
     async def before_loop(self):
