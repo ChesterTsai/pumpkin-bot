@@ -88,7 +88,7 @@ class ytMention(commands.Cog):
         writeData(channel_link, channel_name, who_to_mention, sendThumbnail.lower(), notifying_discord_channel)
         await ctx.send("寫入成功!")
 
-    @tasks.loop(minutes=5)
+    @tasks.loop(seconds=30)
     async def ytMentionLoop(self):
         data = readData()
 
