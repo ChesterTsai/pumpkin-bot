@@ -225,17 +225,15 @@ def readData():
 
 def writeData(channel_link: str, channel_name: str, who_to_mention: str, sendThumbnail: str, notifying_discord_channel: str):
     data = readData()
-    
-    data[channel_link] = {
-        notifying_discord_channel: {
-            "channel_name": channel_name,
-            "who_to_mention": who_to_mention,
-            "latest_video_url": "",
-            "latest_shorts_url": "",
-            "latest_streams_url": "",
-            "latest_upload_date": "",
-            "sendThumbnail": sendThumbnail
-        }
+
+    data[channel_link][notifying_discord_channel] = {
+        "channel_name": channel_name,
+        "who_to_mention": who_to_mention,
+        "latest_video_url": "",
+        "latest_shorts_url": "",
+        "latest_streams_url": "",
+        "latest_upload_date": "",
+        "sendThumbnail": sendThumbnail
     }
     
     with open(file_location, "w", encoding='utf-8') as f:
