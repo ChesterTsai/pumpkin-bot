@@ -13,7 +13,10 @@ class ytMention(commands.Cog):
     def __init__(self, bot):
         self.bot = bot
         self.ytMentionLoop.start()
-    
+
+    def cog_unload(self):
+        self.ytMentionLoop.cancel()
+
     @commands.command()
     async def ytMention(self, ctx):
         """設定Youtube發片通知"""
