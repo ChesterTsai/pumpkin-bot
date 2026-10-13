@@ -30,6 +30,11 @@ import datetime
 import asyncio
 import random
 import time
+from pathlib import Path
+
+# 以 main.py 所在的資料夾為基準，不受執行指令時所在目錄影響
+BASE_DIR = Path(__file__).resolve().parent
+ADMIN_FILE = BASE_DIR / 'data' / 'Admin.txt'
 
 load_dotenv()
 TOKEN = os.getenv("DISCORD_TOKEN")
@@ -46,7 +51,7 @@ async def on_command_error(ctx, error):
         return 0
 
 async def loadCogOnStartUp():
-    for filename in os.listdir("./cogs"):
+    for filename in os.listdir(BASE_DIR / "cogs"):
         if filename.endswith(".py"):
             await bot.load_extension(f"cogs.{filename[:-3]}")
 
@@ -56,13 +61,13 @@ async def load(ctx, cog: str):
     
     # See if "Admin.txt" exists, if not, create one.
     try:
-        f = open('./data/Admin.txt', 'r', encoding='utf-8')
+        f = open(ADMIN_FILE, 'r', encoding='utf-8')
         tmp = f.read()
-        ADMIN_ID_LIST = tmp.split('\n')
+        ADMIN_ID_LIST = tmp.splitlines()
         f.close()
     except FileNotFoundError:
         await ctx.send("建立機器人維護者資料...")
-        with open('./data/Admin.txt', 'w', encoding='utf-8') as f:
+        with open(ADMIN_FILE, 'w', encoding='utf-8') as f:
             f.write("")
             f.close()
         await ctx.send("建立完成")
@@ -80,13 +85,13 @@ async def reload(ctx, cog: str):
     
     # See if "Admin.txt" exists, if not, create one.
     try:
-        f = open('./data/Admin.txt', 'r', encoding='utf-8')
+        f = open(ADMIN_FILE, 'r', encoding='utf-8')
         tmp = f.read()
-        ADMIN_ID_LIST = tmp.split('\n')
+        ADMIN_ID_LIST = tmp.splitlines()
         f.close()
     except FileNotFoundError:
         await ctx.send("建立機器人維護者資料...")
-        with open('./data/Admin.txt', 'w', encoding='utf-8') as f:
+        with open(ADMIN_FILE, 'w', encoding='utf-8') as f:
             f.write("")
             f.close()
         await ctx.send("建立完成")
@@ -104,13 +109,13 @@ async def unload(ctx, cog: str):
     
     # See if "Admin.txt" exists, if not, create one.
     try:
-        f = open('./data/Admin.txt', 'r', encoding='utf-8')
+        f = open(ADMIN_FILE, 'r', encoding='utf-8')
         tmp = f.read()
-        ADMIN_ID_LIST = tmp.split('\n')
+        ADMIN_ID_LIST = tmp.splitlines()
         f.close()
     except FileNotFoundError:
         await ctx.send("建立機器人維護者資料...")
-        with open('./data/Admin.txt', 'w', encoding='utf-8') as f:
+        with open(ADMIN_FILE, 'w', encoding='utf-8') as f:
             f.write("")
             f.close()
         await ctx.send("建立完成")
