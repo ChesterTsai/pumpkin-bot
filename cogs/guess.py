@@ -6,6 +6,7 @@ import datetime
 import json
 import asyncio
 import os
+import logging
 from pathlib import Path
 
 # guess.py 在 cogs/ 底下，variables.json 在專案根目錄的 data/ 裡
@@ -37,10 +38,11 @@ class guess(commands.Cog):
         with open(DATA_PATH, "r", encoding='utf-8') as f:
             self.data = json.load(f)
         self.saveLock = asyncio.Lock()
+        self.saveTasks = set()  # 背景存檔工作，保留參考避免被回收
         self.playing = set()  # 正在玩的 (使用者ID, 頻道ID)
 
-    async def pickAnswer(self, lo, hi):
-        """抽出與上一題不同的答案，並記錄起來"""
+    def pickAnswer(self, lo, hi):
+        """抽出與上一題不同的答案，並記錄起來（只改記憶體，寫檔交給背景）"""
         old_ans = self.data.get("old_ans")
 
         if old_ans is not None and lo < hi and lo <= old_ans <= hi:
@@ -52,8 +54,23 @@ class guess(commands.Cog):
             ans = random.randint(lo, hi)
 
         self.data["old_ans"] = ans
-        await self.saveData()
+        self.scheduleSave()
         return ans
+
+    def scheduleSave(self):
+        # 寫檔丟到背景執行，不讓玩家等磁碟（fsync 偶爾會卡 1~2 秒）
+        task = asyncio.create_task(self.saveData())
+        self.saveTasks.add(task)
+        task.add_done_callback(self.onSaveDone)
+
+    def onSaveDone(self, task):
+        self.saveTasks.discard(task)
+        if not task.cancelled() and task.exception() is not None:
+            logging.getLogger(__name__).error("寫入 variables.json 失敗", exc_info = task.exception())
+
+    async def cog_unload(self):
+        # 卸載/刷新前先把還沒寫完的存檔做完
+        await asyncio.gather(*self.saveTasks, return_exceptions = True)
 
     async def saveData(self):
         # 檔案寫入丟到 thread，避免卡住 event loop；用 lock 避免多場遊戲同時寫檔
@@ -101,7 +118,7 @@ class guess(commands.Cog):
         chancesLeft = chances
         
         
-        ans = await self.pickAnswer(lo, hi)
+        ans = self.pickAnswer(lo, hi)
         
         gameModeInfo = f'你選擇了{difficulty}模式，以下是此模式的數值\n'
         gameModeInfo += f'終極密碼範圍:\t{str(lo)}~{str(hi)}\n'
@@ -122,9 +139,9 @@ class guess(commands.Cog):
         finished = False  # 遊戲是否正常結束（答對或機會用完）
         endtime = starttime
 
-        while True:
+        await ctx.send(f'猜數字({str(lo)}~{str(hi)}, 輸入0結束遊戲)')
 
-            await ctx.send(f'猜數字({str(lo)}~{str(hi)}, 輸入0結束遊戲)')
+        while True:
 
             # wait for giving number by the player
             try:
@@ -148,35 +165,43 @@ class guess(commands.Cog):
 
             endtime = time.monotonic()
 
+            # 每次猜測只送一則訊息：每次 ctx.send 都要等一次網路往返，
+            # 連送好幾則會讓玩家覺得卡頓，也容易碰到 Discord 的送訊息限速
+            lines = []
+
             # Give Player a hint
             if num != ans and abs(num - ans) <= giveHint and chancesLeft != 1:
-                await ctx.send('**很接近囉**')
+                lines.append('**很接近囉**')
 
             # Detect if the Player guesses the right number
             if chancesLeft == chances and num == ans:
-                await ctx.send('恭喜! 第一次就猜中!')
+                lines.append('恭喜! 第一次就猜中!')
                 finished = True
-                break
             elif num == ans:
-                await ctx.send('恭喜! 答對了!')
+                lines.append('恭喜! 答對了!')
                 finished = True
-                break
             elif chancesLeft > 1 and num < ans:
                 chancesLeft -= 1
-                await ctx.send(f'猜大一些\n你還剩{str(chancesLeft)}次機會')
+                lines.append(f'猜大一些\n你還剩{str(chancesLeft)}次機會')
                 lo = num
             elif chancesLeft > 1 and num > ans:
                 chancesLeft -= 1
-                await ctx.send(f'猜小一些\n你還剩{str(chancesLeft)}次機會')
+                lines.append(f'猜小一些\n你還剩{str(chancesLeft)}次機會')
                 hi = num
             else:
                 # chancesLeft == 1 且猜錯
-                await ctx.send(f'你沒機會了\n正確答案是{str(ans)}')
+                lines.append(f'你沒機會了\n正確答案是{str(ans)}')
                 finished = True
-                break
 
-        if finished:
-            await ctx.send('花了{:.2f}秒'.format(endtime - starttime))
+            if finished:
+                lines.append('花了{:.2f}秒'.format(endtime - starttime))
+            else:
+                lines.append(f'猜數字({str(lo)}~{str(hi)}, 輸入0結束遊戲)')
+
+            await ctx.send("\n".join(lines))
+
+            if finished:
+                break
 
 async def setup(bot):
     await bot.add_cog(guess(bot))
